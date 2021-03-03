@@ -12,50 +12,50 @@ import {TodoService} from "./todo.Service"
 export class AppComponent implements OnInit{
 todos: Todo[] = []
 form1: FormGroup = new FormGroup({
-    description: new FormControl(' ', [Validators.required, Validators.minLength(4)]) 
+    description: new FormControl(' ',
+     [Validators.required, Validators.minLength(5)]) 
     })
    
-constructor( 
+  constructor( 
 
   private service:TodoService
 ){}
 
-
       ngOnInit(){
         this.listTodos();
-}
+      }
 
       listTodos(){
       this.service.toList()
-      .subscribe(todoList=> {
-        console.log(todoList)
-        this.todos = todoList
-      })
+        .subscribe(todoList=> {
+          console.log(todoList)
+          this.todos = todoList
+        })
       }
 
       submit(){
       const todo:Todo = {...this.form1.value}
       this.service
       .save( todo)
-      .subscribe(savedtodo =>{
-         this.todos.push(savedtodo)
-         this.form1.reset()
-      })
-     }      
-
-     delete(todo: Todo){
-        this.service.delete(todo.id).subscribe({
-        next: (response) => this.listTodos() 
-
+        .subscribe(savedtodo =>{
+          this.todos.push(savedtodo)
+          this.form1.reset()
         })
- }
-        done(todo: Todo ){
+      }      
+
+      delete(todo: Todo){
+        this.service.delete(todo.id).subscribe({
+          next: (response) => this.listTodos() 
+
+        })  
+      }
+      done(todo: Todo ){
           this.service.mmarkedDone(todo.id).subscribe({
-          next: (updateTodo) => {
-          todo.done = updateTodo.done
-          todo.doneDate = updateTodo.doneDate
-          }
-        })          
+              next: (updateTodo) => {
+              todo.done = updateTodo.done
+              todo.doneDate = updateTodo.doneDate
+              }
+          })          
 }
 
 
